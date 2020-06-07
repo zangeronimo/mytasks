@@ -4,6 +4,8 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 import * as Font from 'expo-font';
 
+import Task from '../components/Task';
+
 import commonStyles from '../commonStyles'
 
 const TaskList = () => {
@@ -32,7 +34,8 @@ const TaskList = () => {
                 </View>
             </ImageBackground>
             <View style={styles.taskList}>
-                <Text>TaskList</Text>
+                <Task desc="Comprar Livro" estimateAt={new Date()} doneAt={new Date()} />
+                <Task desc="Ler Livro" estimateAt={new Date()} doneAt={undefined} />
             </View>
         </View>
     )
