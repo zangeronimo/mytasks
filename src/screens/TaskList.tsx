@@ -1,11 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 const TaskList = () => {
+
+    const today = moment().locale('pt-br').format('ddd, d [de] MMMM')
+
     return (
         <View style={styles.container}>
             <ImageBackground style={styles.background} source={require('../../assets/imgs/today.jpg')}>
-
+                <View style={styles.titleBar}>
+                    <Text>Hoje</Text>
+                    <Text>{today}</Text>
+                </View>
             </ImageBackground>
             <View style={styles.taskList}>
                 <Text>TaskList</Text>
@@ -23,6 +31,10 @@ const styles = StyleSheet.create({
     },
     taskList: {
         flex: 7
+    },
+    titleBar: {
+        flex: 1,
+        justifyContent: 'flex-end'
     }
 });
 
