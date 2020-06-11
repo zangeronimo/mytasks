@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -8,37 +8,45 @@ import Task from '../components/Task';
 
 import commonStyles from '../commonStyles'
 
-const TaskList = () => {
-    const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+class TaskList extends React.Component {
+    state = {
+        fontsLoaded: false,
+    };
 
-    const loadFonts = async () => {
+    today = moment().locale('pt-br').format('ddd, DD [de] MMMM');
+
+    async _loadFontsAsync() {
         await Font.loadAsync({
             // Load a font `Lato` from a static resource
-            Lato: require('../../assets/fonts/Lato.ttf'),
+            'Lato': require('../../assets/fonts/Lato.ttf')
         });
-        setLoadingComplete(true);
+        this.setState({ fontsLoaded: true });
     }
-    loadFonts();
 
-    const today = moment().locale('pt-br').format('ddd, DD [de] MMMM')
-
-    if (!isLoadingComplete) {
-        return null;
+    componentDidMount() {
+        this._loadFontsAsync();
     }
-    return (
-        <View style={styles.container}>
-            <ImageBackground style={styles.background} source={require('../../assets/imgs/today.jpg')}>
-                <View style={styles.titleBar}>
-                    <Text style={styles.title}>Hoje</Text>
-                    <Text style={styles.subtitle}>{today}</Text>
+
+    render() {
+
+        if (!this.state.fontsLoaded) {
+            return null;
+        }
+        return (
+            <View style={styles.container} >
+                <ImageBackground style={styles.background} source={require('../../assets/imgs/today.jpg')}>
+                    <View style={styles.titleBar}>
+                        <Text style={styles.title}>Hoje</Text>
+                        <Text style={styles.subtitle}>{this.today}</Text>
+                    </View>
+                </ImageBackground>
+                <View style={styles.taskList}>
+                    <Task desc="Comprar Livro" estimateAt={new Date()} doneAt={new Date()} />
+                    <Task desc="Ler Livro" estimateAt={new Date()} doneAt={undefined} />
                 </View>
-            </ImageBackground>
-            <View style={styles.taskList}>
-                <Task desc="Comprar Livro" estimateAt={new Date()} doneAt={new Date()} />
-                <Task desc="Ler Livro" estimateAt={new Date()} doneAt={undefined} />
             </View>
-        </View>
-    )
+        )
+    }
 }
 
 const styles = StyleSheet.create({
